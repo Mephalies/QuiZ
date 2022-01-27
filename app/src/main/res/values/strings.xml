@@ -3,4 +3,6 @@
     <string name="quiz_questions_in_here">QUIZ questions in here?</string>
     <string name="questions_remaining">Questions remaining!</string>
     <string name="change_for_each_picture">Change for each picture</string>
+    <string name="play_again">Play Again!</string>
+    <string name="main_menu">Main menu</string>
 </resources>
