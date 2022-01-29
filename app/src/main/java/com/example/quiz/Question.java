@@ -1,8 +1,11 @@
 package com.example.quiz;
 
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 public class Question {
-    public boolean getPlayersAnswer;
-    private int correctAnswer;
+    private final int correctAnswer;
     private int playersAnswer;
     private int imageId;
     private String questionText;
@@ -10,10 +13,10 @@ public class Question {
     private String answer2;
     private String answer3;
     private String answer4;
-    private int totalQuestions;
-    private int numberQuestion;
 
-
+    public static int numberQuestion=2;
+    public static int totalQuestions=3;
+    public static int totalCorrect;
 
     public Question(int imageId, String questionText, String answer1, String answer2, String answer3, String answer4, int correctAnswer) {
         this.imageId = imageId;
@@ -24,97 +27,55 @@ public class Question {
         this.answer4 = answer4;
         this.correctAnswer = correctAnswer;
         this.playersAnswer = -1;
-        this.totalQuestions=3;
-        this.setNumberQuestion(1);
     }
+
 
     public boolean isCorrect(){
-        return this.correctAnswer == this.playersAnswer;
+        numberQuestion++;
+        if (this.correctAnswer == this.playersAnswer){
+            totalCorrect++;
+            return true;
+        }
+        return false;
     }
 
-    public boolean isFinished(){
-        return getNumberQuestion() == totalQuestions + 1;
+    public boolean gameIsFinished(){
+        return numberQuestion == totalQuestions + 1;
     }
 
     public boolean playerAnswered() {
         return playersAnswer != -1;
     }
 
-    private int getCorrectAnswer() {
-        return correctAnswer;
-    }
-    private void setCorrectAnswer(int correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-    private int getPlayersAnswer() {
-        return playersAnswer;
+    public void selectingButton(Button btn1, Button btn2, Button btn3, Button btn4, int i){
+        playersAnswer=i;
+        resetButtonText(btn1, btn2, btn3, btn4);
+        changeButtonText(btn1, btn2, btn3, btn4,i);
     }
 
-    public void setPlayersAnswer(int playersAnswer) {
-        this.playersAnswer = playersAnswer;
+    private void resetButtonText(Button btn1, Button btn2, Button btn3, Button btn4){
+        btn1.setText(this.answer1);
+        btn2.setText(this.answer2);
+        btn3.setText(this.answer3);
+        btn4.setText(this.answer4);
+    }
+    private void changeButtonText(Button btn1, Button btn2, Button btn3, Button btn4, int i){
+        if(i==1)
+            btn1.setText("✔ " + this.answer1);
+        if(i==2)
+            btn2.setText("✔ " + this.answer2);
+        if(i==3)
+            btn3.setText("✔ " + this.answer3);
+        if(i==4)
+            btn4.setText("✔ " + this.answer4);
+
     }
 
-    public int getImageId() {
-        return imageId;
+    public void displayQuestion(TextView text, ImageView image, Button btn1, Button btn2, Button btn3, Button btn4){
+        text.setText(questionText);
+        image.setImageResource(imageId);
+        //TODO do a random answer selector
+        resetButtonText(btn1, btn2, btn3, btn4);
     }
 
-    private void setImageId(int imageId) {
-        this.imageId = imageId;
-    }
-
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    private void setQuestionText(String questionText) {
-        this.questionText = questionText;
-    }
-
-    public String getAnswer1() {
-        return answer1;
-    }
-
-    private void setAnswer1(String answer1) {
-        this.answer1 = answer1;
-    }
-
-    public String getAnswer2() {
-        return answer2;
-    }
-
-    private void setAnswer2(String answer2) {
-        this.answer2 = answer2;
-    }
-
-    public String getAnswer3() {
-        return answer3;
-    }
-
-    private void setAnswer3(String answer3) {
-        this.answer3 = answer3;
-    }
-
-    public String getAnswer4() {
-        return answer4;
-    }
-
-    private void setAnswer4(String answer4) {
-        this.answer4 = answer4;
-    }
-
-    public int getTotalQuestions() {
-        return totalQuestions;
-    }
-
-    private void setTotalQuestions(int totalQuestions) {
-        this.totalQuestions = totalQuestions;
-    }
-
-    public int getNumberQuestion() {
-        return numberQuestion;
-    }
-
-    public void setNumberQuestion(int numberQuestion) {
-        this.numberQuestion = numberQuestion;
-    }
 }

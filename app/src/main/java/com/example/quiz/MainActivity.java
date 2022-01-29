@@ -29,12 +29,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "nenter");
         setContentView(R.layout.activity_main);
 
         newGame1 = findViewById(R.id.btn_main_new_game2);
-
-
         extracted();
 
 

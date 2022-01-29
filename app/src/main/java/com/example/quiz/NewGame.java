@@ -63,32 +63,26 @@ public class NewGame extends AppCompatActivity {
         startNewGame();
     }
 
-
-
     // Displays image, question and answers
     void displayQuestion(Question question){
-        questionTextView.setText(question.getQuestionText());
-        questionImageView.setImageResource(question.getImageId());
-        answer1Button.setText(question.getAnswer1());
-        answer2Button.setText(question.getAnswer2());
-        answer3Button.setText(question.getAnswer3());
-        answer4Button.setText(question.getAnswer4());
+        question.displayQuestion(questionTextView,questionImageView,answer1Button,answer2Button,answer3Button,answer4Button);
     }
 
     // Sets text of remaining questions
-    void displayQuestionsRemaining(Question questions){
-        questionRemainingTextView.setText(questions.getNumberQuestion() +"/"+ questions.getTotalQuestions());
+    void displayQuestionsRemaining(){
+        questionRemainingTextView.setText(Question.numberQuestion +"/"+ Question.totalQuestions);
     }
 
 
     void startNewGame(){
         //initializing
         questions= new ArrayList<>();
+        //Resetting for new game
         counter=1;
-        totalCorrect=0;
+        Question.totalCorrect=0;
+        Question.numberQuestion=1;
         currentQuestionIndex=0;
 
-        // Amount of questions in game
 
 
         // Creates each question
@@ -116,7 +110,7 @@ public class NewGame extends AppCompatActivity {
 
 
         // gets number of question an updates it on screen
-        displayQuestionsRemaining(firstQuestion);
+        displayQuestionsRemaining();
 
         // displays Question
         displayQuestion(firstQuestion);
@@ -141,28 +135,23 @@ public class NewGame extends AppCompatActivity {
     public void onAnswersSubmission(){
         Question answer = getCurrentQuestion();
 
-        if(answer.isCorrect())
-            totalCorrect++;
-        else if(!answer.playerAnswered()) // if player doesn't choose an option it doesn't advance
+        answer.isCorrect();//check if answer is correct
+        if(!answer.playerAnswered()) // checks if player choose any options
             return;
 
         questions.remove(answer);
-        answer.setNumberQuestion(++counter);
 
-
-        if(answer.isFinished()) {
+        if(answer.gameIsFinished()) {
             Intent myIntent = new Intent(NewGame.this, GameOver.class);
-            myIntent.putExtra("TotalQuestions", answer.getTotalQuestions());
-            myIntent.putExtra("TotalCorrect", totalCorrect);
+            myIntent.putExtra("TotalQuestions", Question.totalQuestions);
+            myIntent.putExtra("TotalCorrect", Question.totalCorrect);
             startActivity(myIntent);
             (new Handler()).postDelayed(this::startNewGame, 200);
-
-
 
         }
         else{
             // updates number of questions remaining
-            displayQuestionsRemaining(answer);
+            displayQuestionsRemaining();
             // randomly chooses new question
             chooseNewQuestion();
             // updates question
@@ -180,19 +169,7 @@ public class NewGame extends AppCompatActivity {
     // adds a ✔ to represent the selected button
     void onAnswerSelected(int answerSelected){
         Question current =getCurrentQuestion();
-        current.setPlayersAnswer(answerSelected);
-        answer1Button.setText(current.getAnswer1());
-        answer2Button.setText(current.getAnswer2());
-        answer3Button.setText(current.getAnswer3());
-        answer4Button.setText(current.getAnswer4());
-        if(answerSelected==1)
-            answer1Button.setText("✔ " + current.getAnswer1());
-        else if(answerSelected==2)
-            answer2Button.setText("✔ " + current.getAnswer2());
-        else if(answerSelected==3)
-            answer3Button.setText("✔ " + current.getAnswer3());
-        else
-            answer4Button.setText("✔ " + current.getAnswer4());
+        current.selectingButton(answer1Button, answer2Button, answer3Button, answer4Button,answerSelected);
     }
 
     // Sets the 4 buttons for choice uses OnAnswerSelected
